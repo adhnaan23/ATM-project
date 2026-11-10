@@ -1,7 +1,28 @@
 import java.util.*;
 
 class Atm{
-    
+    public synchronized void checkbalance(Map<Integer,Customer> obj)
+    {
+        Scanner sc=new Scanner(System.in);
+        System.out.println("Enter account pin:");
+        int accountpin=sc.nextInt();
+        if(obj.containsKey(accountpin))
+
+        {
+            Customer c= obj.get(accountpin);
+            if (c.getbalance()>0) {
+                System.out.println("Your balance:"+c.getbalance());
+            }
+            else{
+                System.out.println("You have insufficient balance");
+            }
+        }
+        else{
+            System.out.println("Enter the correct accountpin");
+        }
+
+
+    }
     // private String phonenumber;
     
 
@@ -25,11 +46,11 @@ class Atm{
 }
 class Deposit extends Atm {
     Scanner sc=new Scanner(System.in);
-    public synchronized void cashdeposit(Map<String,Customer> obj){
+    public synchronized void cashdeposit(Map<Integer,Customer> obj){
     System.out.println("Enter the amount");
-    String name=sc.next();
-    if(obj.containsKey(name)){
-        Customer c =obj.get(name);
+    int accountpin=sc.nextInt();
+    if(obj.containsKey(accountpin)){
+        Customer c =obj.get(accountpin);
         double balance=sc.nextDouble();
 
         if(balance>0){
@@ -47,22 +68,22 @@ class Deposit extends Atm {
     
 }
 }
-class Withdraw {
+class Withdraw extends Atm{
     Scanner sc = new Scanner(System.in);
 
-    public void cashwithdraw(Map<String, Customer> obj) {
+    public void cashwithdraw(Map<Integer,Customer> obj) {
 
-        System.out.println("Enter your name:");
-        String name = sc.next();
+        System.out.println("Enter your accountpin:");
+        int accountpin= sc.nextInt();
 
-        if (obj.containsKey(name)) {
+        if (obj.containsKey(accountpin)) {
 
-            Customer c = obj.get(name);
+            Customer c = obj.get(accountpin);
 
-            System.out.println("Enter your PIN:");
-            int enterpin = sc.nextInt();
+            // System.out.println("Enter your PIN:");
+            // int enterpin = sc.nextInt();
 
-            if (enterpin == c.getaccountpin()) {
+            // if (enterpin == c.getaccountpin()) {
 
                 System.out.println("Enter the amount:");
                 double amount = sc.nextDouble();
@@ -70,11 +91,13 @@ class Withdraw {
                 if (amount > 0 && amount <= c.getbalance()) {
 
                     double remainingBalance = c.getbalance() - amount;
+                    System.out.println("Withdraw Successfull: "+amount);
 
                     c.setbalance(remainingBalance);
 
                     System.out.println("Remaining balance: " + c.getbalance());
-                } else {
+                } 
+                else {
                     System.out.println("Insufficient amount");
                 }
 
@@ -82,8 +105,8 @@ class Withdraw {
                 System.out.println("Incorrect PIN");
             }
 
-        } else {
-            System.out.println("Customer not found");
-        }
+        // } else {
+        //     System.out.println("Customer not found");
+        // }
     }
 }
